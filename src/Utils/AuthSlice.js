@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import jwt_decode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 const slice = createSlice({
     name: 'auth',
@@ -8,7 +8,7 @@ const slice = createSlice({
         setCredentials: (state, { payload: user }) => {
             try {
                 // Save the JWT in session storage
-                const token = jwt_decode(user.token);
+                const token = jwtDecode(user.token);
                 localStorage.setItem('token', JSON.stringify(token));
                 localStorage.setItem('encodedToken', user.token);
                 localStorage.setItem('name', user.name);
