@@ -4,46 +4,44 @@ import Login from "./features/Auth/Login";
 import { useSelector } from "react-redux";
 import Protected from "./features/Auth/Protected";
 import moment from "moment-timezone";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Example from "./features/test/test";
+import Dashboard from "./features/Dashboard/Dashboard";
 
 function App() {
-    moment.tz.setDefault();
-    const store_token = useSelector((state) => state.auth.JWTtoken);
-    const storage_token = localStorage.getItem("token");
+  moment.tz.setDefault();
+  const store_token = useSelector((state) => state.auth.JWTtoken);
+  const storage_token = localStorage.getItem("token");
 
-    if (!!store_token || !!storage_token) {
-        return (
-            
-                <Protected>
-                    {/* <ToastContainer 
-                        position="top-right"
-                        autoClose={3000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="dark"
-                        transition: Bounce
-                    /> */}
-                    <Routes>
-                        <Route path="/login" Component={Login} />
-                    </Routes>
-                </Protected>
-            
-        );
-    }
+  if (!!store_token || !!storage_token) {
     return (
-        
-            <Routes>
-                <Route path="*" Component={Login} />
-               
-            </Routes>
-        
+      <Protected>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition="bounce"
+        />
+        <Routes>
+          <Route path="*" Component={Dashboard} />
+        </Routes>
+      </Protected>
     );
+  }
+  return (
+    <Routes>
+      <Route path="*" Component={Login} />
+      <Route path="/" Component={Login} />
+    </Routes>
+  );
 }
 
 export default App;

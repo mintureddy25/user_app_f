@@ -1,20 +1,20 @@
 import { baseApi } from "./baseApi";
 
-const betsApi = baseApi.injectEndpoints({
+const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getUserFriends: builder.query({
-            query: ({userId}) => `user/${userId}/friends`,
+            query: (userId) => `user/${userId}/friends`,
             providesTags: (result, error, arg) => {
                 return ["Friends"];
             },
         }),
         getUserDetails: builder.query({
-            query: ({userId}) => `user/${userId}`,
+            query: (userId) => `user/${userId}`,
             providesTags: (result, error, arg) => {
                 return ["User"];
             },
         }),
-        updatePlayerBets: builder.mutation({
+        updateUserData: builder.mutation({
             query: ({userId, data}) => ({
                 url: `user/${userId}`, 
                 method: "PUT",
@@ -29,5 +29,5 @@ const betsApi = baseApi.injectEndpoints({
 export const {
     useGetUserFriendsQuery,
     useGetUserDetailsQuery,
-    useUpdatePlayerBetsMutation,
-} = betsApi;
+    useUpdateUserDataMutation,
+} = userApi;

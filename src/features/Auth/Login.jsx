@@ -5,9 +5,11 @@ import { setErrors } from "../../Utils/ErrorSlice";
 import { setCredentials } from "../../Utils/AuthSlice";
 import { useDispatch } from "react-redux";
 import FullText from "../../Components/FullText";
+import { useNavigate } from "react-router-dom"; 
 
 export default function Login() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); 
   const [login, { isLoading, isSuccess, isError }] = useLoginMutation();
 
   const [data, setData] = useState({
@@ -25,18 +27,21 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     try {
-      const res = await login(data).unwrap()
-      dispatch(setCredentials(res));
+      // Attempt login
+      const res = await login(data).unwrap();
+      dispatch(setCredentials(res)); // Store credentials in Redux
+
+      // Redirect to Dashboard on success
+      navigate("/dashboard");  // Navigate to the dashboard page after successful login
     } catch (error) {
-      if(error.status == 401 || error.status == 422)  {
-        setError('password',{ type: 'custom', message: error?.data?.message });
+      if (error.status === 401 || error.status === 422) {
+        setError('password', { type: 'custom', message: error?.data?.message });
       }
-      if(error.status == 404) {
-        setError('email',{ type: 'custom', message: error?.data?.message });
+      if (error.status === 404) {
+        setError('email', { type: 'custom', message: error?.data?.message });
       }
     }
   };
-
 
   const onChange = (e) => {
     clearErrors(e.target.name);
@@ -48,11 +53,6 @@ export default function Login() {
     <>
       <div className="m-5 md:mx-auto lg:w-1/2 min-h-full flex-col justify-center px-6 py-6 lg:px-8 bg-white rounded-xl">
         <div className="sm:mx-auto">
-          {/* <img
-            className="mx-auto h-10 w-auto"
-            src="/toleram-icon.png"
-            alt="Your Company"
-          /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Log in
           </h2>
@@ -91,11 +91,6 @@ export default function Login() {
                 >
                   Password
                 </label>
-                {/* <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                  </a>
-                </div> */}
               </div>
               <div className="mt-2 ">
                 <FullText
@@ -122,13 +117,6 @@ export default function Login() {
               </button>
             </div>
           </form>
-
-          {/* <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{' '}
-            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-              Start a 14 day free trial
-            </a>
-          </p> */}
         </div>
       </div>
     </>
