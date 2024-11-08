@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Example from "./features/test/test";
 import Dashboard from "./features/Dashboard/Dashboard";
+import Signup from "./features/Auth/Signup";
 
 function App() {
   moment.tz.setDefault();
@@ -39,7 +40,7 @@ function App() {
   return (
     <Routes>
       <Route path="*" Component={Login} />
-      <Route path="/" Component={Login} />
+      <Route path="/signup" Component={Signup} />
     </Routes>
   );
 }

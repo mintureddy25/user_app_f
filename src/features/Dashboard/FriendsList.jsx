@@ -1,8 +1,8 @@
 import React from 'react';
 import { useGetUserFriendsQuery } from '../../app/Services/userApi';
 
-export default function FriendsList() {
-  const { data: friends, isLoading, error } = useGetUserFriendsQuery((1));
+export default function FriendsList({userId}) {
+  const { data: friends, isLoading, error } = useGetUserFriendsQuery((userId));
 
   // Handle loading state
   if (isLoading) {
@@ -11,7 +11,7 @@ export default function FriendsList() {
 
   // Handle error state
   if (error) {
-    return <div>Error loading friends.</div>;
+    return <div>No friends found.</div>;
   }
 
   return (

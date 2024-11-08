@@ -12,8 +12,8 @@ import Profile from './Profile';  // Imported the Profile component
 import { useGetUserDetailsQuery } from '../../app/Services/userApi';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Profile', href: '#', icon: UsersIcon, current: false },
+  { name: 'Dashboard', href: '#', icon: HomeIcon },
+  { name: 'Profile', href: '#', icon: UsersIcon },
 ];
 
 const userNavigation = [
@@ -28,6 +28,7 @@ function classNames(...classes) {
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showProfile, setShowProfile] = useState(false); // State to control Profile visibility
+  const [currentNav, setCurrentNav] = useState('Dashboard');  // Track the current navigation item
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -57,6 +58,12 @@ export default function Dashboard() {
     dispatch(unsetCredentials());
     localStorage.clear();
     navigate('/');  // Redirect to the home page (or login page)
+  };
+
+  // Handle profile visibility toggle
+  const handleNavigation = (navName) => {
+    setCurrentNav(navName); // Update the current navigation item
+    setShowProfile(navName === 'Profile'); // Show Profile when Profile item is clicked
   };
 
   return (
@@ -98,11 +105,12 @@ export default function Dashboard() {
                             <a
                               href={item.href}
                               className={classNames(
-                                item.current
+                                currentNav === item.name
                                   ? 'bg-gray-800 text-white'
                                   : 'text-gray-400 hover:bg-gray-800 hover:text-white',
                                 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
                               )}
+                              onClick={() => handleNavigation(item.name)} // Update current navigation
                             >
                               <item.icon aria-hidden="true" className="h-6 w-6 shrink-0" />
                               {item.name}
@@ -137,12 +145,12 @@ export default function Dashboard() {
                         <a
                           href={item.href}
                           className={classNames(
-                            item.current
+                            currentNav === item.name
                               ? 'bg-gray-800 text-white'
                               : 'text-gray-400 hover:bg-gray-800 hover:text-white',
                             'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold',
                           )}
-                          onClick={() => setShowProfile(item.name === 'Profile')}
+                          onClick={() => handleNavigation(item.name)} // Update current navigation
                         >
                           <item.icon aria-hidden="true" className="h-6 w-6 shrink-0" />
                           {item.name}
@@ -208,7 +216,17 @@ export default function Dashboard() {
                       <MenuItem key={item.name}>
                         <a
                           href={item.href}
-                          onClick={item.name === 'Sign out' ? handleLogout : null}
+                          onClick={item.name === 'Sign out' 
+                            ? handleLogout 
+                            : item.name === 'Your profile' 
+                              ? () => { 
+                                  setShowProfile(true); 
+                                  setCurrentNav("Profile"); 
+              
+                                }
+                              : null}
+                          
+
                           className="block px-3 py-1 text-sm/6 text-gray-900 data-[focus]:bg-gray-50 data-[focus]:outline-none"
                         >
                           {item.name}
@@ -224,7 +242,7 @@ export default function Dashboard() {
           <main className="py-10">
             <div className="px-4 sm:px-6 lg:px-8">
               {/* Conditionally render Profile component */}
-              {showProfile ? <Profile /> : <><FriendsList /><ActivityFeed /></>}
+              {showProfile ? <Profile user={userDetails.user} setShowProfile={setShowProfile}/> : <><FriendsList userId={userId} /><ActivityFeed user={userDetails.user} /></>}
             </div>
           </main>
         </div>

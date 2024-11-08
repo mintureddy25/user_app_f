@@ -15,8 +15,8 @@ const userApi = baseApi.injectEndpoints({
             },
         }),
         updateUserData: builder.mutation({
-            query: ({userId, data}) => ({
-                url: `user/${userId}`, 
+            query: ({id, data}) => ({
+                url: `user/${id}`, 
                 method: "PUT",
                 body: data,
             }),

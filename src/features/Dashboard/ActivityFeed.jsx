@@ -1,13 +1,32 @@
-// ActivityFeed.js
 import React from 'react';
 
-const activityFeed = [
-  { message: 'Welcome back, Tom Cook!', timestamp: 'Today at 10:30 AM' },
-  { message: 'You last logged in 2 days ago.', timestamp: '2 days ago' },
-  { message: 'You have 3 new notifications.', timestamp: 'Yesterday' },
-];
+export default function ActivityFeed({ user }) {
+  // Helper function to format the last login timestamp to "YYYY-MM-DD HH:mm:ss"
+  const formatTimestamp = (date) => {
+    const d = new Date(date);
 
-export default function ActivityFeed() {
+    // Extract the components of the date
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    const seconds = String(d.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const activityFeed = [
+    { 
+      message: `Welcome back, ${user.name}!`, 
+      timestamp: `You last logged in at ${formatTimestamp(user.last_login)}`  // Display formatted timestamp
+    },
+    { 
+      message: 'You have 3 new notifications.',
+      timestamp: 'Yesterday'
+    }
+  ];
+
   return (
     <div className="space-y-6 mt-8">
       <h2 className="text-xl font-semibold text-gray-900">Activity Feed</h2>
